@@ -1,41 +1,53 @@
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
-
+#include <fstream>
 using namespace std;
 
-int main(){
+int main(int argc, char *argv[]){
     int array[10000];
-    int index = 0;
-    int startIndex[100];
+    int index = 5000;
+    int nestStartIndex[100];
     int nestLevel = -1;
-    string input;
-    cin>>input;
-    for(int i=0;i<input.size();i++){
-        if(input[i]=='>'){
+
+    string bfCode;
+    string line;
+    ifstream file;
+    file.open(argv[1]);
+    while(getline(file,line)){
+        bfCode+=line;
+    }
+
+    for(int i=0; i<bfCode.size(); i++){
+        if(bfCode[i]=='>'){
             index++;
-        }else if(input[i]=='<'){
-            index--;
-        }else if(input[i]=='+'){
+        }else if(bfCode[i]=='<'){
+            if(index>0){
+                index--;
+            }
+        }else if(bfCode[i]=='+'){
             array[index]++;
-        }else if(input[i]=='-'){
-            array[index]--;
-        }else if(input[i]=='['){
+        }else if(bfCode[i]=='-'){
+            if(array[index]>0){
+                array[index]--;
+            }
+        }else if(bfCode[i]=='['){
             nestLevel++;
-            startIndex[nestLevel] = i+1;
-        }else if(input[i]==']'){
+            nestStartIndex[nestLevel] = i;
+        }else if(bfCode[i]==']'){
             if(array[index]!=0){
-                i = startIndex[nestLevel]-1;
+                i=nestStartIndex[nestLevel];
             }else{
                 nestLevel--;
             }
-        }else if(input[i]=='.'){
+        }else if(bfCode[i]=='.'){
             cout<<(char)array[index];
-        }else if(input[i]==','){
+        }else if(bfCode[i]==','){
             char in;
             cin>>in;
             array[index] = (int)in;
         }
+        //cout<<nestLevel<<" ";
     }
     cout<<endl;
     return 0;
