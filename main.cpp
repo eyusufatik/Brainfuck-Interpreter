@@ -5,10 +5,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]){
-    int array[10000];
-    int index = 5000;
-    int nestStartIndex[100];
-    int nestLevel = -1;
+    int array[30000];
+    int index = 0;
 
     string bfCode;
     string line;
@@ -18,7 +16,55 @@ int main(int argc, char *argv[]){
         bfCode+=line;
     }
 
-    for(int i=0; i<bfCode.size(); i++){
+    int i=0;
+    while(i<bfCode.size()){
+        if(bfCode[i]=='>'){
+            index++;
+            i++;
+        }else if(bfCode[i]=='<'){
+            if(index>0){
+                index--;
+                i++;
+            }
+        }else if(bfCode[i]=='+'){
+            array[index]++;
+            i++;
+        }else if(bfCode[i]=='-'){
+            if(array[index]>0){
+                array[index]--;
+            }
+            i++;
+        }else if(bfCode[i]=='['){
+            i++;
+        }else if(bfCode[i]==']'){
+            if(array[index]!=0){
+                int loop = 1;
+                while(loop>0){
+                    i--;
+                    if(bfCode[i]==']'){
+                        loop++;
+                    }else if(bfCode[i]=='['){
+                        loop--;
+                    }
+                }
+            }else{
+                i++;
+            }
+        }else if(bfCode[i]=='.'){
+            cout<<"print: "<<(char)array[index]<<endl;
+            i++;
+        }else if(bfCode[i]==','){
+            char in;
+            cin>>in;
+            array[index] = (int)in;
+            i++;
+        }else{
+            i++;
+        }
+        //cout<<i<<" ";
+    }
+
+    /*for(int i=0; i<bfCode.size(); i++){
         if(bfCode[i]=='>'){
             index++;
         }else if(bfCode[i]=='<'){
@@ -34,12 +80,14 @@ int main(int argc, char *argv[]){
         }else if(bfCode[i]=='['){
             nestLevel++;
             nestStartIndex[nestLevel] = i;
-        }else if(bfCode[i]==']'){
+            //cout<<nestLevel<<" ";
+        }else if(bfCode[i]==']' && array[index]>0){
             if(array[index]!=0){
                 i=nestStartIndex[nestLevel];
             }else{
                 nestLevel--;
             }
+            //cout<<nestLevel<<" ";
         }else if(bfCode[i]=='.'){
             cout<<(char)array[index];
         }else if(bfCode[i]==','){
@@ -47,8 +95,7 @@ int main(int argc, char *argv[]){
             cin>>in;
             array[index] = (int)in;
         }
-        //cout<<nestLevel<<" ";
-    }
+    }*/
     cout<<endl;
     return 0;
 }
